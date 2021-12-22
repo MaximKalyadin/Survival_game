@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 using UnityEngine;
 using System;
 
@@ -15,6 +17,7 @@ public class InventoryManager : MonoBehaviour
     private bool isArmor;
     private bool isHelmet;
     private bool isWeapon;
+    private HealthPointsManager _healthPointsManager;
 
     public void Awake()
     {
@@ -39,6 +42,7 @@ public class InventoryManager : MonoBehaviour
         }
         UIBG.SetActive(false);
         inventoryPanel.gameObject.SetActive(false);
+        _healthPointsManager = GetComponent<HealthPointsManager>();
     }
 
     // Update is called once per frame
@@ -134,7 +138,13 @@ public class InventoryManager : MonoBehaviour
     {
         if (quickSlots[3] != null)
         {
-            // переменная для увеличения жизни += quickSlots[3].item.healAmounth;
+            _healthPointsManager.AddHealthPoints((quickSlots[3].item as FoodItem).healAmounth); // переменная для увеличения жизни += quickSlots[3].item.healAmounth;
+            quickSlots[3].item = null;
+            quickSlots[3].amount = 0;
+            quickSlots[3].isEmpty = true;
+            quickSlots[3].iconGO.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+            quickSlots[3].iconGO.GetComponent<Image>().sprite = null;
+            quickSlots[3].itemAmountText.text = "";
         }
     }
 }
