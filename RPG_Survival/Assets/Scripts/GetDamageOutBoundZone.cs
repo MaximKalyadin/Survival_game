@@ -13,6 +13,8 @@ public class GetDamageOutBoundZone : MonoBehaviour
     private bool _stopChecking;
     private float _time;
 
+    public float _defaultDamage = 5;
+
     void Start()
     {
         _currentGameObjectCollider = GetComponent<SphereCollider>();
@@ -40,14 +42,24 @@ public class GetDamageOutBoundZone : MonoBehaviour
 
             if (!intersectsColliders.Any(collider => collider.gameObject.tag.Equals("Player")) && !_stopChecking)
             {
-                if (_healthPointsManager.ReduceHealthPoints(5))
+                if (_healthPointsManager.ReduceHealthPoints(_defaultDamage))
                 {
                     _stopChecking = true;
-                    Debug.LogWarning("Ti umer dolbaeb");
+                    Debug.LogWarning("Ti umer");
                 }
             }
 
             _time = 1;
         }
+    }
+
+    public void setDefaultDamage()
+    {
+        _defaultDamage = 5;
+    }
+
+    public void ChangeDamage(float damage)
+    {
+        _defaultDamage *= damage;
     }
 }

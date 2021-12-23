@@ -10,6 +10,8 @@ public class Attack : MonoBehaviour
     private bool _actionInProcess;
     private float _time; //delay 
 
+    public float _defaultpoints = 10;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +38,7 @@ public class Attack : MonoBehaviour
     {
         if ((collider.tag == "Tree" || collider.tag == "Box") && _actionInProcess)
         {
-            collider.gameObject.GetComponent<ThisDestructibleItem>().ReduceHealthPoints(10);
+            collider.gameObject.GetComponent<ThisDestructibleItem>().ReduceHealthPoints(_defaultpoints);
             _actionInProcess = false;
         }
     }
@@ -47,4 +49,14 @@ public class Attack : MonoBehaviour
     }
 
     public void SetKeyPressed() => _keyPressed = true;
+
+    public void setDefaultPoints()
+    {
+        _defaultpoints = 10;
+    }
+
+    public void ChangePoints(float points)
+    {
+        _defaultpoints *= points;
+    }
 }

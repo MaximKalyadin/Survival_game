@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour
     private bool isHelmet;
     private bool isWeapon;
     private HealthPointsManager _healthPointsManager;
+    private Attack _attack;
+    private GetDamageOutBoundZone _getDamage;
 
     public void Awake()
     {
@@ -43,6 +45,8 @@ public class InventoryManager : MonoBehaviour
         UIBG.SetActive(false);
         inventoryPanel.gameObject.SetActive(false);
         _healthPointsManager = GetComponent<HealthPointsManager>();
+        _attack = GetComponent<Attack>();
+        _getDamage = GetComponent<GetDamageOutBoundZone>();
     }
 
     // Update is called once per frame
@@ -61,10 +65,14 @@ public class InventoryManager : MonoBehaviour
         if (quickSlots[0] != null && !isArmor)
         {
             isArmor = true;
-            // какая-то переменная для уменьшения уровня дмага по челу *= ((100 - quickSlots[0].item.armor) / 100);
+            try
+            {
+                _getDamage.ChangeDamage(((100 - (quickSlots[0].item as ArmorItem).armor) / 100));
+            } catch (Exception ex) { }
         }
-        else
+        else if (quickSlots[0] == null)
         {
+            _getDamage.setDefaultDamage();
             isArmor = false;
         }
         if (quickSlots[1] != null &&  !isHelmet)
@@ -79,10 +87,14 @@ public class InventoryManager : MonoBehaviour
         if (quickSlots[2] != null && !isWeapon)
         {
             isWeapon = true;
-            // переменная для увеличения дамага по деревьям *= ((100 - quickSlots[2].item.Damage) / 100);
+            try
+            {
+                _attack.ChangePoints(((100 + (quickSlots[2].item as WeaponItem).Damage) / 100));
+            } catch (Exception ex) { }
         }
-        else
+        else if (quickSlots[2] == null)
         {
+            _attack.setDefaultPoints();
             isWeapon = false;
         }
     }
@@ -138,13 +150,21 @@ public class InventoryManager : MonoBehaviour
     {
         if (quickSlots[3] != null)
         {
-            _healthPointsManager.AddHealthPoints((quickSlots[3].item as FoodItem).healAmounth); // переменная для увеличения жизни += quickSlots[3].item.healAmounth;
-            quickSlots[3].item = null;
-            quickSlots[3].amount = 0;
-            quickSlots[3].isEmpty = true;
-            quickSlots[3].iconGO.GetComponent<Image>().color = new Color(1, 1, 1, 0);
-            quickSlots[3].iconGO.GetComponent<Image>().sprite = null;
-            quickSlots[3].itemAmountText.text = "";
+            try
+            {
+                _healthPointsManager.AddHealthPoints((quickSlots[3].item as FoodItem).healAmounth);
+                DestroySlot(3);
+            } catch (Exception ex) { }
         }
+    }
+
+    public void DestroySlot(int index)
+    {
+        quickSlots[index].item = null;
+        quickSlots[index].amount = 0;
+        quickSlots[index].isEmpty = true;
+        quickSlots[index].iconGO.GetComponent<Image>().color = new Color(1, 1, 1, 0);
+        quickSlots[index].iconGO.GetComponent<Image>().sprite = null;
+        quickSlots[index].itemAmountText.text = "";
     }
 }
