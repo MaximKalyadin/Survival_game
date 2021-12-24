@@ -2,6 +2,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class DropLoot : MonoBehaviour
 {
@@ -23,8 +24,41 @@ public class DropLoot : MonoBehaviour
 
     void OnDestroy()
     {
-        for (var i = 0; i < _random.Next(0, 4); i++)
-            Instantiate(lootGameObject, _currentGameObjectTransform.position + CalculateLootOffset(), _currentGameObjectTransform.rotation);
+        for (var i = 0; i < _random.Next(1, 4); i++)
+        {
+            try
+            {
+                int type = _random.Next(1, 5);
+                if (type == 1)
+                {
+                    var item = Instantiate(lootGameObject, _currentGameObjectTransform.position + CalculateLootOffset(), _currentGameObjectTransform.rotation);
+                    var thisItem = item.GetComponent<ThisItem>();
+                    thisItem.item = (FoodItem)AssetDatabase.LoadAssetAtPath("Assets/Scripts/Apple.asset", typeof(FoodItem));
+                    thisItem.amount = 1;
+                }
+                if (type == 2)
+                {
+                    var item = Instantiate(lootGameObject, _currentGameObjectTransform.position + CalculateLootOffset(), _currentGameObjectTransform.rotation);
+                    var thisItem = item.GetComponent<ThisItem>();
+                    thisItem.item = (PlantItem)AssetDatabase.LoadAssetAtPath("Assets/Scripts/Plant_Item.asset", typeof(PlantItem));
+                    thisItem.amount = 1;
+                }
+                if (type == 3)
+                {
+                    var item = Instantiate(lootGameObject, _currentGameObjectTransform.position + CalculateLootOffset(), _currentGameObjectTransform.rotation);
+                    var thisItem = item.GetComponent<ThisItem>();
+                    thisItem.item = (WeaponItem)AssetDatabase.LoadAssetAtPath("Assets/Scripts/Weapon_Item.asset", typeof(WeaponItem));
+                    thisItem.amount = 1;
+                }
+                if (type == 4)
+                {
+                    var item = Instantiate(lootGameObject, _currentGameObjectTransform.position + CalculateLootOffset(), _currentGameObjectTransform.rotation);
+                    var thisItem = item.GetComponent<ThisItem>();
+                    thisItem.item = (ArmorItem)AssetDatabase.LoadAssetAtPath("Assets/Scripts/Sheet.asset", typeof(ArmorItem));
+                    thisItem.amount = 1;
+                }
+            } catch (Exception ex) { }
+        }
     }
 
     Vector3 CalculateLootOffset() => new Vector3(_random.Next(-20, 21) / 6, 0, _random.Next(-20, 21) / 6);

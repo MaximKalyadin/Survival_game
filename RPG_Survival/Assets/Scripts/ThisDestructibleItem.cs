@@ -35,7 +35,7 @@ public class ThisDestructibleItem : MonoBehaviour
         _healthBarCanvas.transform.position = new Vector3(
            currentGameObjectTransform.position.x,
            currentGameObjectTriggerBoxCollider.size.y,
-           currentGameObjectTransform.position.z - 0.5f
+           currentGameObjectTransform.position.z - 1.5f
         );
 
         //установка ширины канваса равной ширине коллайдера
