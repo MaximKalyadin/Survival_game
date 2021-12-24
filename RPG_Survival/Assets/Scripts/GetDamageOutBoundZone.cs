@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GetDamageOutBoundZone : MonoBehaviour
 {
@@ -45,6 +46,7 @@ public class GetDamageOutBoundZone : MonoBehaviour
                 if (_healthPointsManager.ReduceHealthPoints(_defaultDamage))
                 {
                     _stopChecking = true;
+                    SceneManager.LoadScene(0);
                     Debug.LogWarning("Ti umer");
                 }
             }
